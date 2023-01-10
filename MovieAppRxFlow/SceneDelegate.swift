@@ -6,17 +6,38 @@
 //
 
 import UIKit
-
+import RxFlow
+import RxSwift
 class SceneDelegate: UIResponder, UIWindowSceneDelegate {
 
     var window: UIWindow?
-
+    let disposeBag = DisposeBag()
+    let coordinate = FlowCoordinator()
+    let movieService = MovieService()
+    lazy var appServices = {
+        return AppServices(movieService: self.movieService)
+    }()
 
     func scene(_ scene: UIScene, willConnectTo session: UISceneSession, options connectionOptions: UIScene.ConnectionOptions) {
         // Use this method to optionally configure and attach the UIWindow `window` to the provided UIWindowScene `scene`.
         // If using a storyboard, the `window` property will automatically be initialized and attached to the scene.
         // This delegate does not imply the connecting scene or session are new (see `application:configurationForConnectingSceneSession` instead).
-        guard let _ = (scene as? UIWindowScene) else { return }
+        guard let windowScene = (scene as? UIWindowScene) else { return }
+        self.window = UIWindow(windowScene: windowScene)
+        coordinate.rx.willNavigate.subscribe(onNext:{ (flow,step) in
+            print("Will navigate to flow \(flow) and step \(step)")
+        }).disposed(by: disposeBag)
+        
+        coordinate.rx.didNavigate.subscribe(onNext:{ (flow,step) in
+            print("Did navigate to flow \(flow) and step \(step)")
+        }).disposed(by: disposeBag)
+        
+        let appFlow = AppFlow(withServices: appServices)
+        Flows.use(appFlow, when: .ready) { [unowned window] (root) in
+            self.window?.rootViewController = root
+            self.window?.makeKeyAndVisible()
+        }
+        coordinate.coordinate(flow: appFlow, with: AppStepper(withServices: self.appServices))
     }
 
     func sceneDidDisconnect(_ scene: UIScene) {
@@ -46,7 +67,8 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         // Use this method to save data, release shared resources, and store enough scene-specific state information
         // to restore the scene back to its current state.
     }
-
-
 }
 
+struct AppServices: HasMovieService{
+    var movieService: MovieService?
+}
