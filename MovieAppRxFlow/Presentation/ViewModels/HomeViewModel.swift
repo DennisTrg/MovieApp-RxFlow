@@ -17,7 +17,8 @@ class HomeViewModel: HasMovieService, Stepper{
     init(withService services: AppServices){
         self.movieService = services.movieService
     }
-    public func pick(movieId: Int){
-        self.steps.accept(AppStep.pickedMovie(id: movieId))
+
+    public func pick(movieInfo: MovieInfo){
+        self.steps.accept(AppStep.pickedMovie(withModel: movieInfo))
     }
 }

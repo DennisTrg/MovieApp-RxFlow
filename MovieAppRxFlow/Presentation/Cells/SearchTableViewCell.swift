@@ -113,7 +113,6 @@ class SearchTableViewCell: UITableViewCell {
         movieGenre.text = model.genre
         releaseDate.text = model.releaseDate
         movieRate.rating = model.ratingScore / 2
-        let itemNum = NSNumber(value: index)
 
         DispatchQueue.global(qos: .utility).async { [weak self] in
             guard let imagePath = model.posterPath else {return}
