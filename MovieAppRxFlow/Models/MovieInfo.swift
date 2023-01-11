@@ -14,6 +14,9 @@ struct MovieInfo: Codable{
     let genre: String?
     let releaseDate: String?
     let ratingScore: Double
+    let backdropPath: String?
+    let title: String?
+    let overview: String?
 }
 
 extension MovieInfo{
@@ -30,6 +33,6 @@ extension MovieInfo{
                 return genre.joined(separator: ", ")
             }
                 return ""
-        }(), releaseDate: movieInfo.releaseDate, ratingScore: movieInfo.voteAverage ?? 0)
+        }(), releaseDate: movieInfo.releaseDate, ratingScore: movieInfo.voteAverage ?? 0, backdropPath: movieInfo.backdropPath, title: movieInfo.title, overview: movieInfo.overview)
     }
 }

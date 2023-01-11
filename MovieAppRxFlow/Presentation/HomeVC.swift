@@ -22,7 +22,7 @@ class HomeVC: UIViewController {
         return refreshControl
     }()
     
-     let collectionView: UICollectionView = {
+    let collectionView: UICollectionView = {
          let layout = UICollectionViewFlowLayout()
          layout.sectionInset = UIEdgeInsets(top: 20, left: 24, bottom: 20, right: 24)
          
@@ -30,6 +30,15 @@ class HomeVC: UIViewController {
          collectionView.register(HomeCollectionViewCell.self, forCellWithReuseIdentifier: HomeCollectionViewCell.identifier)
         return collectionView
     }()
+    
+    deinit {
+        print("Deinit - Home VC")
+    }
+    
+    override func didReceiveMemoryWarning() {
+        super.didReceiveMemoryWarning()
+        print("Leak Home Vc")
+    }
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -58,6 +67,10 @@ class HomeVC: UIViewController {
         customRefreshControl.rx.controlEvent(.valueChanged).asDriver().drive(onNext:{[weak self] in
             self?.viewModel.movieService?.fetchMovie()
             self?.collectionView.refreshControl?.endRefreshing()
+        }).disposed(by: disposeBag)
+        
+        collectionView.rx.modelSelected(MovieInfo.self).asDriver().drive(onNext:{[weak self] (model) in
+            self?.viewModel.pick(movieInfo: model)
         }).disposed(by: disposeBag)
     }
 }
