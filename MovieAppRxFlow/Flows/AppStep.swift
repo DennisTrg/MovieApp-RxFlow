@@ -9,12 +9,12 @@ import Foundation
 import RxFlow
 
 enum AppStep: Step{
-    
     case dashboard
     
-    
+    // Navigate to tab bar with 2 screens
     case movieListScreen
     case searchMovieScreen
     
-    case pickedMovie(id: Int)
+    //Navigate to Movie Detail Screen
+    case pickedMovie(withModel: MovieInfo)
 }
