@@ -66,6 +66,7 @@ class SearchTableViewCell: UITableViewCell {
         return stackView
     }()
     
+    //MARK: Set up View
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
         let containerView = UIView()
@@ -106,6 +107,7 @@ class SearchTableViewCell: UITableViewCell {
         self.releaseDate.text = nil
     }
     
+    //MARK: Set up Data
     func config(model: MovieInfo, index: Int){
         movieName.text = model.originalTitle
         movieGenre.text = model.genre

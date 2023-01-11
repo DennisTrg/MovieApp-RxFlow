@@ -25,6 +25,16 @@ class SearchVC: UIViewController, UITableViewDelegate, UIGestureRecognizerDelega
         tableView.register(SearchTableViewCell.self, forCellReuseIdentifier: SearchTableViewCell.identifier)
         return tableView
     }()
+    
+    deinit {
+        print("Deinit - Search VC")
+    }
+    
+    override func didReceiveMemoryWarning() {
+        super.didReceiveMemoryWarning()
+        print("Leak Search Vc")
+    }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -32,6 +42,7 @@ class SearchVC: UIViewController, UITableViewDelegate, UIGestureRecognizerDelega
         setupData()
     }
     
+    //MARK: Set up View
     private func setupView(){
         self.view.backgroundColor = .systemBackground
         self.view.addSubview(searchBar)
@@ -53,6 +64,7 @@ class SearchVC: UIViewController, UITableViewDelegate, UIGestureRecognizerDelega
         }).disposed(by: disposeBag)
     }
     
+    //MARK: Set up Data
     private func setupData(){
         tableView.rx.setDelegate(self)
         searchBar.rx.text

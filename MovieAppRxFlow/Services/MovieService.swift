@@ -66,5 +66,4 @@ class MovieService {
     func searchMovieResult() -> BehaviorRelay<[MovieInfo]>{
         return viewModel.listSearchResult
     }
-    
 }

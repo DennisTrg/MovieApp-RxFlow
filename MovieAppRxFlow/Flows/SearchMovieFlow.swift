@@ -32,7 +32,7 @@ class SearchMovieFlow: Flow{
         }
     }
     
-    func navigateToSearchScreen() -> FlowContributors{
+    private func navigateToSearchScreen() -> FlowContributors{
         let vc = SearchVC()
         let viewModel = SearchViewModel(withService: self.services)
         vc.viewModel = viewModel
