@@ -28,16 +28,28 @@ class ListMoviesFlow: Flow{
         switch step {
         case .movieListScreen:
             return navigateToListMovieScreen()
+        case .pickedMovie(let model):
+            return navigateToDetailMovieScreen(movieInfo: model)
         default:
             return .none
         }
     }
     
-    func navigateToListMovieScreen() -> FlowContributors{
+    private func navigateToListMovieScreen() -> FlowContributors{
         let vc = HomeVC()
         let viewModel = HomeViewModel(withService: self.services)
         vc.viewModel = viewModel
         vc.title = "Home"
+        self.rootViewController.pushViewController(vc, animated: true)
+        return .one(flowContributor: .contribute(withNextPresentable: vc,
+                                                 withNextStepper: vc.viewModel))
+    }
+    
+    private func navigateToDetailMovieScreen(movieInfo: MovieInfo) -> FlowContributors{
+        let vc = MovieDetailVC()
+        let viewModel = MovieDetailViewModel(withModel: movieInfo)
+        vc.viewModel = viewModel
+        vc.title = movieInfo.title
         self.rootViewController.pushViewController(vc, animated: true)
         return .one(flowContributor: .contribute(withNextPresentable: vc,
                                                  withNextStepper: vc.viewModel))
